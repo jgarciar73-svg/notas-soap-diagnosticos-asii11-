@@ -96,7 +96,13 @@ final class SoapNote
      * modifica la versión actual: eso es justamente la regla de negocio
      * central del módulo (versionado sin pérdida de historial).
      */
+    /**
+     * $doctorIdQueCorrige es quien AUTORIZA esta versión, no necesariamente
+     * el mismo doctor que escribió la original (autoría clínica: cada
+     * versión conserva quién la redactó a ella).
+     */
     public function corregir(
+        string $doctorIdQueCorrige,
         string $subjective,
         string $objective,
         string $assessment,
@@ -106,13 +112,13 @@ final class SoapNote
             throw NotaSoapSinIdException::porFaltaDeId();
         }
 
-        self::validarCampos($this->medicalRecordId, $this->doctorId, $subjective, $objective, $assessment, $plan);
+        self::validarCampos($this->medicalRecordId, $doctorIdQueCorrige, $subjective, $objective, $assessment, $plan);
 
         return new self(
             null,
             $this->id,
             $this->medicalRecordId,
-            $this->doctorId,
+            $doctorIdQueCorrige,
             $subjective,
             $objective,
             $assessment,

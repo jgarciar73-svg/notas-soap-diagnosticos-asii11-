@@ -35,7 +35,7 @@ echo "=== VersionadoTest ===\n\n";
 $notaSinGuardar = SoapNote::registrar('EXP-700', 'DOC-15', 'S', 'O', 'A', 'P');
 $fallo = false;
 try {
-    $notaSinGuardar->corregir('S corregido', 'O', 'A', 'P');
+    $notaSinGuardar->corregir('DOC-15', 'S corregido', 'O', 'A', 'P');
 } catch (NotaSoapSinIdException) {
     $fallo = true;
 }
@@ -50,16 +50,19 @@ $original = $repo->guardar($original);
 verificar('la versión original queda guardada con id 1', $original->id() === 1, $pasaron, $fallaron);
 verificar('la versión original no es una corrección', !$original->esCorreccion(), $pasaron, $fallaron);
 
-$corregida = $original->corregir('Tos con flema', 'Afebril, sibilancias', 'Bronquitis con broncoespasmo', 'Salbutamol y reposo');
+// Corrige un doctor DISTINTO al que escribió la nota original (autoría clínica)
+$corregida = $original->corregir('DOC-99-SUPERVISOR', 'Tos con flema', 'Afebril, sibilancias', 'Bronquitis con broncoespasmo', 'Salbutamol y reposo');
 verificar('corregir() todavía no le asigna id a la nueva versión', $corregida->id() === null, $pasaron, $fallaron);
 verificar('corregir() liga la nueva versión a la id de la original', $corregida->previousVersionId() === 1, $pasaron, $fallaron);
+verificar('la nueva versión queda a nombre de quien corrige, no del autor original', $corregida->doctorId() === 'DOC-99-SUPERVISOR', $pasaron, $fallaron);
 
 $corregida = $repo->guardar($corregida);
 verificar('la versión corregida se guarda con un id nuevo, distinto al original', $corregida->id() === 2, $pasaron, $fallaron);
 
-$filas = $pdo->query('SELECT id, previous_version_id, assessment FROM soap_notes ORDER BY id')->fetchAll();
+$filas = $pdo->query('SELECT id, previous_version_id, doctor_id, assessment FROM soap_notes ORDER BY id')->fetchAll();
 verificar('quedan DOS filas en la base, la original no se borró ni se sobrescribió', count($filas) === 2, $pasaron, $fallaron);
-verificar('la fila original conserva su texto sin cambios', $filas[0]['assessment'] === 'Bronquitis', $pasaron, $fallaron);
+verificar('la fila original conserva su texto Y su autor original sin cambios', $filas[0]['assessment'] === 'Bronquitis' && $filas[0]['doctor_id'] === 'DOC-15', $pasaron, $fallaron);
+verificar('la fila nueva quedó a nombre del doctor que corrigió, no del original', $filas[1]['doctor_id'] === 'DOC-99-SUPERVISOR', $pasaron, $fallaron);
 verificar('la fila nueva apunta a la original por previous_version_id', (int) $filas[1]['previous_version_id'] === 1, $pasaron, $fallaron);
 
 echo "\nTotal VersionadoTest: $pasaron pasaron, $fallaron fallaron\n";
