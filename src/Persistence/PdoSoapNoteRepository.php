@@ -18,12 +18,13 @@ final class PdoSoapNoteRepository implements SoapNoteRepository
     {
         $sentencia = $this->pdo->prepare(
             'INSERT INTO soap_notes
-                (medical_record_id, doctor_id, subjective, objective, assessment, plan, recorded_at)
+                (previous_version_id, medical_record_id, doctor_id, subjective, objective, assessment, plan, recorded_at)
              VALUES
-                (:medical_record_id, :doctor_id, :subjective, :objective, :assessment, :plan, :recorded_at)'
+                (:previous_version_id, :medical_record_id, :doctor_id, :subjective, :objective, :assessment, :plan, :recorded_at)'
         );
 
         $sentencia->execute([
+            ':previous_version_id' => $nota->previousVersionId(),
             ':medical_record_id' => $nota->medicalRecordId(),
             ':doctor_id' => $nota->doctorId(),
             ':subjective' => $nota->subjective(),

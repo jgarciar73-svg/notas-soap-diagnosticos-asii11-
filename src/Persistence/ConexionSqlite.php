@@ -24,6 +24,7 @@ final class ConexionSqlite
         $pdo->exec(
             'CREATE TABLE IF NOT EXISTS soap_notes (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                previous_version_id INTEGER,
                 medical_record_id TEXT NOT NULL,
                 doctor_id TEXT NOT NULL,
                 subjective TEXT NOT NULL,

@@ -6,10 +6,12 @@ namespace MicroHis\Domain;
 
 use DateTimeImmutable;
 use MicroHis\Domain\Exceptions\NotaSoapIncompletaException;
+use MicroHis\Domain\Exceptions\NotaSoapSinIdException;
 
 final class SoapNote
 {
     private ?int $id;
+    private ?int $previousVersionId;
     private string $medicalRecordId;
     private string $doctorId;
     private string $subjective;
@@ -20,6 +22,7 @@ final class SoapNote
 
     private function __construct(
         ?int $id,
+        ?int $previousVersionId,
         string $medicalRecordId,
         string $doctorId,
         string $subjective,
@@ -29,6 +32,7 @@ final class SoapNote
         DateTimeImmutable $recordedAt
     ) {
         $this->id = $id;
+        $this->previousVersionId = $previousVersionId;
         $this->medicalRecordId = $medicalRecordId;
         $this->doctorId = $doctorId;
         $this->subjective = $subjective;
@@ -50,6 +54,7 @@ final class SoapNote
 
         return new self(
             null,
+            null,
             $medicalRecordId,
             $doctorId,
             $subjective,
@@ -62,6 +67,7 @@ final class SoapNote
 
     public static function reconstruir(
         int $id,
+        ?int $previousVersionId,
         string $medicalRecordId,
         string $doctorId,
         string $subjective,
@@ -72,13 +78,54 @@ final class SoapNote
     ): self {
         self::validarCampos($medicalRecordId, $doctorId, $subjective, $objective, $assessment, $plan);
 
-        return new self($id, $medicalRecordId, $doctorId, $subjective, $objective, $assessment, $plan, $recordedAt);
+        return new self(
+            $id,
+            $previousVersionId,
+            $medicalRecordId,
+            $doctorId,
+            $subjective,
+            $objective,
+            $assessment,
+            $plan,
+            $recordedAt
+        );
+    }
+
+    /**
+     * Crea una NUEVA versión de esta nota, ligada a esta por id. No borra ni
+     * modifica la versión actual: eso es justamente la regla de negocio
+     * central del módulo (versionado sin pérdida de historial).
+     */
+    public function corregir(
+        string $subjective,
+        string $objective,
+        string $assessment,
+        string $plan
+    ): self {
+        if ($this->id === null) {
+            throw NotaSoapSinIdException::porFaltaDeId();
+        }
+
+        self::validarCampos($this->medicalRecordId, $this->doctorId, $subjective, $objective, $assessment, $plan);
+
+        return new self(
+            null,
+            $this->id,
+            $this->medicalRecordId,
+            $this->doctorId,
+            $subjective,
+            $objective,
+            $assessment,
+            $plan,
+            new DateTimeImmutable()
+        );
     }
 
     public function conId(int $id): self
     {
         return new self(
             $id,
+            $this->previousVersionId,
             $this->medicalRecordId,
             $this->doctorId,
             $this->subjective,
@@ -122,6 +169,16 @@ final class SoapNote
     public function id(): ?int
     {
         return $this->id;
+    }
+
+    public function previousVersionId(): ?int
+    {
+        return $this->previousVersionId;
+    }
+
+    public function esCorreccion(): bool
+    {
+        return $this->previousVersionId !== null;
     }
 
     public function medicalRecordId(): string
