@@ -7,6 +7,8 @@ declare(strict_types=1);
 require __DIR__ . '/../autoload.php';
 
 use MicroHis\Application\RegistrarNotaConDiagnostico;
+use MicroHis\Application\SolicitudDiagnostico;
+use MicroHis\Application\SolicitudNotaSoap;
 use MicroHis\Domain\DiagnosisType;
 use MicroHis\Persistence\InMemoryDiagnosisRepository;
 use MicroHis\Persistence\InMemorySoapNoteRepository;
@@ -37,15 +39,8 @@ $repoDiagnosticos = new InMemoryDiagnosisRepository();
 $casoUso = new RegistrarNotaConDiagnostico($repoNotas, $repoDiagnosticos);
 
 $resultado = $casoUso->ejecutar(
-    'EXP-300',
-    'DOC-07',
-    'Dolor abdominal',
-    'Abdomen blando, doloroso a la palpación',
-    'Probable gastritis',
-    'Dieta blanda y omeprazol',
-    'K29.7',
-    'Gastritis no especificada',
-    DiagnosisType::Presuntivo,
+    new SolicitudNotaSoap('EXP-300', 'DOC-07', 'Dolor abdominal', 'Abdomen blando, doloroso a la palpación', 'Probable gastritis', 'Dieta blanda y omeprazol'),
+    new SolicitudDiagnostico('K29.7', 'Gastritis no especificada', DiagnosisType::Presuntivo),
 );
 
 verificar('la nota quedó guardada en memoria con id 1', $resultado['nota']->id() === 1, $pasaron, $fallaron);
@@ -54,15 +49,8 @@ verificar('el repositorio en memoria puede listar lo que guardó', count($repoNo
 
 // Segunda nota, para confirmar que el id sigue subiendo solo
 $casoUso->ejecutar(
-    'EXP-301',
-    'DOC-07',
-    'Tos con flema',
-    'Afebril, sibilancias leves',
-    'Bronquitis',
-    'Salbutamol',
-    'J40',
-    'Bronquitis no especificada',
-    DiagnosisType::Principal,
+    new SolicitudNotaSoap('EXP-301', 'DOC-07', 'Tos con flema', 'Afebril, sibilancias leves', 'Bronquitis', 'Salbutamol'),
+    new SolicitudDiagnostico('J40', 'Bronquitis no especificada', DiagnosisType::Principal),
 );
 verificar('la segunda nota guardada en memoria recibe el id 2', count($repoNotas->todas()) === 2, $pasaron, $fallaron);
 

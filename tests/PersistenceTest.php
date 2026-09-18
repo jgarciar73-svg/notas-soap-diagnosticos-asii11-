@@ -7,6 +7,8 @@ declare(strict_types=1);
 require __DIR__ . '/../autoload.php';
 
 use MicroHis\Application\RegistrarNotaConDiagnostico;
+use MicroHis\Application\SolicitudDiagnostico;
+use MicroHis\Application\SolicitudNotaSoap;
 use MicroHis\Domain\Diagnosis;
 use MicroHis\Domain\DiagnosisType;
 use MicroHis\Persistence\ConexionSqlite;
@@ -40,15 +42,8 @@ $casoUso = new RegistrarNotaConDiagnostico($repoNotas, $repoDiagnosticos);
 
 // Camino feliz contra la base de datos real
 $resultado = $casoUso->ejecutar(
-    'EXP-100',
-    'DOC-05',
-    'Fiebre de dos días',
-    'T 38.6, FC 98',
-    'Probable dengue',
-    'Hidratación y control en 24h',
-    'A90',
-    'Dengue clásico',
-    DiagnosisType::Presuntivo,
+    new SolicitudNotaSoap('EXP-100', 'DOC-05', 'Fiebre de dos días', 'T 38.6, FC 98', 'Probable dengue', 'Hidratación y control en 24h'),
+    new SolicitudDiagnostico('A90', 'Dengue clásico', DiagnosisType::Presuntivo),
 );
 verificar('la nota quedó guardada con id 1 en la base real', $resultado['nota']->id() === 1, $pasaron, $fallaron);
 verificar('el diagnóstico quedó guardado con id 1 en la base real', $resultado['diagnostico']->id() === 1, $pasaron, $fallaron);

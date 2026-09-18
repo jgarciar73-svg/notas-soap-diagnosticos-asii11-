@@ -9,6 +9,8 @@ require __DIR__ . '/../autoload.php';
 use MicroHis\Application\DiagnosisRepository;
 use MicroHis\Application\RegistrarNotaConDiagnostico;
 use MicroHis\Application\SoapNoteRepository;
+use MicroHis\Application\SolicitudDiagnostico;
+use MicroHis\Application\SolicitudNotaSoap;
 use MicroHis\Domain\Diagnosis;
 use MicroHis\Domain\DiagnosisType;
 use MicroHis\Domain\Exceptions\NotaSoapIncompletaException;
@@ -63,15 +65,8 @@ $notasQueFallan = new class implements SoapNoteRepository {
 // Camino feliz de punta a punta
 $casoUso = new RegistrarNotaConDiagnostico($notasQueFuncionan, $diagnosticosQueFuncionan);
 $resultado = $casoUso->ejecutar(
-    'EXP-010',
-    'DOC-02',
-    'Tos seca',
-    'Afebril',
-    'Bronquitis leve',
-    'Reposo y líquidos',
-    'J20.9',
-    'Bronquitis aguda',
-    DiagnosisType::Principal,
+    new SolicitudNotaSoap('EXP-010', 'DOC-02', 'Tos seca', 'Afebril', 'Bronquitis leve', 'Reposo y líquidos'),
+    new SolicitudDiagnostico('J20.9', 'Bronquitis aguda', DiagnosisType::Principal),
 );
 verificar(
     'ejecutar() con todo válido devuelve nota y diagnóstico con id',
@@ -83,7 +78,10 @@ verificar(
 // Regla de dominio: no debería llegar a Persistence si la nota es inválida
 $fallo = false;
 try {
-    $casoUso->ejecutar('EXP-011', 'DOC-02', '', 'Afebril', 'Bronquitis leve', 'Reposo y líquidos', 'J20.9', 'Bronquitis aguda', DiagnosisType::Principal);
+    $casoUso->ejecutar(
+        new SolicitudNotaSoap('EXP-011', 'DOC-02', '', 'Afebril', 'Bronquitis leve', 'Reposo y líquidos'),
+        new SolicitudDiagnostico('J20.9', 'Bronquitis aguda', DiagnosisType::Principal),
+    );
 } catch (NotaSoapIncompletaException) {
     $fallo = true;
 }
@@ -93,7 +91,10 @@ verificar('ejecutar() con nota incompleta lanza NotaSoapIncompletaException sin 
 $casoUsoConFalla = new RegistrarNotaConDiagnostico($notasQueFallan, $diagnosticosQueFuncionan);
 $fallo = false;
 try {
-    $casoUsoConFalla->ejecutar('EXP-012', 'DOC-02', 'Tos seca', 'Afebril', 'Bronquitis leve', 'Reposo y líquidos', 'J20.9', 'Bronquitis aguda', DiagnosisType::Principal);
+    $casoUsoConFalla->ejecutar(
+        new SolicitudNotaSoap('EXP-012', 'DOC-02', 'Tos seca', 'Afebril', 'Bronquitis leve', 'Reposo y líquidos'),
+        new SolicitudDiagnostico('J20.9', 'Bronquitis aguda', DiagnosisType::Principal),
+    );
 } catch (RuntimeException $e) {
     $fallo = $e->getMessage() === 'Fallo simulado de base de datos';
 }

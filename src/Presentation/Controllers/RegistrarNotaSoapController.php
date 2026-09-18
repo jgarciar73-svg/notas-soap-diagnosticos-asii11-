@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace MicroHis\Presentation\Controllers;
 
 use MicroHis\Application\RegistrarNotaConDiagnostico;
+use MicroHis\Application\SolicitudDiagnostico;
+use MicroHis\Application\SolicitudNotaSoap;
 use MicroHis\Domain\Diagnosis;
 use MicroHis\Domain\DiagnosisType;
 use MicroHis\Domain\SoapNote;
@@ -37,16 +39,21 @@ final class RegistrarNotaSoapController
      */
     public function manejar(array $entrada): array
     {
-        return $this->casoUso->ejecutar(
+        $solicitudNota = new SolicitudNotaSoap(
             $entrada['medical_record_id'],
             $entrada['doctor_id'],
             $entrada['subjective'],
             $entrada['objective'],
             $entrada['assessment'],
             $entrada['plan'],
+        );
+
+        $solicitudDiagnostico = new SolicitudDiagnostico(
             $entrada['cie10_code'],
             $entrada['diagnosis_description'],
             DiagnosisType::from($entrada['diagnosis_type']),
         );
+
+        return $this->casoUso->ejecutar($solicitudNota, $solicitudDiagnostico);
     }
 }
