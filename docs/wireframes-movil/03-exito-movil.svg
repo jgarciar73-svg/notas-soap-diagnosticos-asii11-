@@ -1,0 +1,31 @@
+<svg viewBox="0 0 390 700" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif">
+  <rect width="390" height="700" fill="#ffffff"/>
+  <rect width="390" height="28" fill="#111111"/>
+  <text x="16" y="19" font-size="11" fill="#ffffff">9:41</text>
+  <text x="340" y="19" font-size="11" fill="#ffffff">100%</text>
+
+  <rect x="0" y="28" width="390" height="48" fill="#2f6fed"/>
+  <text x="140" y="58" font-size="15" font-weight="bold" fill="#ffffff">Nota registrada</text>
+
+  <circle cx="195" cy="150" r="36" fill="#eaf7ea" stroke="#5cb85c" stroke-width="2"/>
+  <text x="180" y="162" font-size="28" fill="#2c7a2c">✓</text>
+
+  <text x="90" y="212" font-size="14" font-weight="bold" fill="#2c7a2c">Guardado correctamente ①</text>
+  <text x="105" y="234" font-size="12" fill="#3a7a3a">Nota #14 · Diagnóstico #9</text>
+
+  <rect x="16" y="266" width="358" height="130" rx="8" fill="#f7f7fb" stroke="#dddddd"/>
+  <text x="28" y="290" font-size="12" font-weight="bold" fill="#333333">EXP-4821 · Dra. Pineda</text>
+  <text x="28" y="312" font-size="11" fill="#555555">Análisis: Migraña probable, sin</text>
+  <text x="28" y="328" font-size="11" fill="#555555">signos de alarma</text>
+  <text x="28" y="352" font-size="11" fill="#555555">Diagnóstico: G43.9 · principal</text>
+  <text x="28" y="376" font-size="10" fill="#999999">② Resumen mínimo, sin el detalle completo</text>
+
+  <rect x="16" y="420" width="358" height="48" rx="8" fill="#2f6fed"/>
+  <text x="115" y="450" font-size="15" fill="#ffffff">Registrar otra nota</text>
+
+  <rect x="16" y="480" width="358" height="48" rx="8" fill="#ffffff" stroke="#2f6fed" stroke-width="2"/>
+  <text x="110" y="510" font-size="15" fill="#2f6fed">Ver expediente completo ③</text>
+
+  <text x="16" y="580" font-size="10" fill="#666666">① Confirmación clara primero ② Detalle a un toque, no toda la pantalla</text>
+  <text x="16" y="592" font-size="10" fill="#666666">③ Salida natural hacia el historial</text>
+</svg>
