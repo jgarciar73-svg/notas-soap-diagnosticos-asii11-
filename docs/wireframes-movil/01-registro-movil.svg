@@ -1,0 +1,50 @@
+<svg viewBox="0 0 390 780" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif">
+  <rect width="390" height="780" fill="#ffffff"/>
+  <!-- barra de estado -->
+  <rect width="390" height="28" fill="#111111"/>
+  <text x="16" y="19" font-size="11" fill="#ffffff">9:41</text>
+  <text x="340" y="19" font-size="11" fill="#ffffff">100%</text>
+
+  <!-- app bar -->
+  <rect x="0" y="28" width="390" height="48" fill="#2f6fed"/>
+  <text x="16" y="58" font-size="16" fill="#ffffff">←</text>
+  <text x="44" y="58" font-size="15" font-weight="bold" fill="#ffffff">Nueva nota SOAP</text>
+
+  <!-- chip de contexto, compacto -->
+  <rect x="16" y="88" width="358" height="34" rx="17" fill="#eef4ff"/>
+  <text x="30" y="110" font-size="12" fill="#1c3f8f">EXP-4821 · Dra. Pineda ①</text>
+
+  <!-- Subjetivo -->
+  <text x="16" y="146" font-size="13" font-weight="bold" fill="#222222">Subjetivo</text>
+  <rect x="16" y="152" width="358" height="64" fill="#ffffff" stroke="#999999" stroke-dasharray="4,3" rx="6"/>
+  <text x="26" y="188" font-size="12" font-style="italic" fill="#aaaaaa">Ej.: "Dolor de cabeza..."</text>
+
+  <!-- Objetivo -->
+  <text x="16" y="236" font-size="13" font-weight="bold" fill="#222222">Objetivo</text>
+  <rect x="16" y="242" width="358" height="64" fill="#ffffff" stroke="#999999" stroke-dasharray="4,3" rx="6"/>
+
+  <!-- Analisis -->
+  <text x="16" y="326" font-size="13" font-weight="bold" fill="#222222">Análisis</text>
+  <rect x="16" y="332" width="358" height="64" fill="#ffffff" stroke="#999999" stroke-dasharray="4,3" rx="6"/>
+
+  <!-- Plan -->
+  <text x="16" y="416" font-size="13" font-weight="bold" fill="#222222">Plan</text>
+  <rect x="16" y="422" width="358" height="64" fill="#ffffff" stroke="#999999" stroke-dasharray="4,3" rx="6"/>
+
+  <!-- Diagnostico, colapsable -->
+  <rect x="16" y="502" width="358" height="46" rx="8" fill="#f7f7fb" stroke="#dddddd"/>
+  <text x="28" y="530" font-size="13" font-weight="bold" fill="#333333">+ Agregar diagnóstico ②</text>
+
+  <text x="16" y="576" font-size="11" fill="#888888">Tocá para expandir CIE-10, descripción</text>
+  <text x="16" y="590" font-size="11" fill="#888888">y tipo. Prioriza lo esencial primero. ③</text>
+
+  <text x="16" y="630" font-size="11" fill="#999999">↓ seguí bajando para más ④</text>
+
+  <!-- boton fijo abajo -->
+  <rect x="0" y="712" width="390" height="68" fill="#ffffff" stroke="#eeeeee"/>
+  <rect x="16" y="726" width="358" height="44" rx="8" fill="#2f6fed"/>
+  <text x="170" y="753" font-size="15" fill="#ffffff">Registrar nota</text>
+
+  <text x="16" y="694" font-size="10" fill="#666666">① Contexto compacto, siempre visible ② No compite con lo principal</text>
+  <text x="16" y="706" font-size="10" fill="#666666">③ Menos carga cognitiva ④ Scroll vertical, un solo dedo</text>
+</svg>
